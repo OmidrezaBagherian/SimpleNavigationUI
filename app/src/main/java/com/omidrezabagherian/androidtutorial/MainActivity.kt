@@ -7,12 +7,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import com.omidrezabagherian.androidtutorial.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainBinding: ActivityMainBinding
-
+    private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -23,31 +24,27 @@ class MainActivity : AppCompatActivity() {
         setContentView(mainBinding.root)
     }
 
-    private fun init(){
-        setupActionBar()
+    private fun init() {
+        initNavigationDrawer()
     }
 
-    private fun setupActionBar(){
-        setSupportActionBar(mainBinding.toolbar)
-        mainBinding.toolbar.inflateMenu(R.menu.main_menu)
+    private fun initNavigationDrawer() {
+        actionBarDrawerToggle = ActionBarDrawerToggle(
+            this,
+            mainBinding.drawerLayout,
+            R.string.nav_open,
+            R.string.nav_close
+        )
+        mainBinding.drawerLayout.addDrawerListener(actionBarDrawerToggle)
+        actionBarDrawerToggle.syncState()
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.menu_home->
-                Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
-            R.id.menu_dashboard->
-                Toast.makeText(this, "Dashboard", Toast.LENGTH_SHORT).show()
-            R.id.menu_setting->
-                Toast.makeText(this, "Setting", Toast.LENGTH_SHORT).show()
-            R.id.menu_logout->
-                Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show()
-        }
+        if (actionBarDrawerToggle.onOptionsItemSelected(item))
+            return true
+
         return super.onOptionsItemSelected(item)
     }
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.main_menu, menu)
-        return true
-    }
+
 }

@@ -6,4 +6,6 @@
     <string name="text_menu_setting">Setting</string>
     <string name="text_menu_logout">Logout</string>
 
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
 </resources>
