@@ -9,8 +9,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.omidrezabagherian.androidtutorial.databinding.ActivityMainBinding
@@ -19,7 +21,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mainBinding: ActivityMainBinding
     private lateinit var navController: NavController
-    private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,25 +36,13 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
         setupActionBarWithNavController(navController)
-        mainBinding.navView.setupWithNavController(navController)
-        initNavigationDrawer()
+        mainBinding.bottomNav.setupWithNavController(navController)
+        NavigationUI.setupActionBarWithNavController(this, navController)
         managementNavigationDrawer()
     }
 
-    private fun initNavigationDrawer() {
-        actionBarDrawerToggle = ActionBarDrawerToggle(
-            this,
-            mainBinding.drawerLayout,
-            R.string.nav_open,
-            R.string.nav_close
-        )
-        mainBinding.drawerLayout.addDrawerListener(actionBarDrawerToggle)
-        actionBarDrawerToggle.syncState()
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    }
-
     private fun managementNavigationDrawer() {
-        mainBinding.navView.setNavigationItemSelectedListener {
+        mainBinding.bottomNav.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_home -> {
                     navController.navigate(R.id.homeFragment)
@@ -72,14 +61,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (actionBarDrawerToggle.onOptionsItemSelected(item))
-            return true
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        return NavigationUI.navigateUp(navController,mainBinding.drawerLayout)
+    override fun onNavigateUp(): Boolean {
+        val navController = this.findNavController(R.id.nav_host_fragment)
+        return navController.navigateUp()
     }
 }
