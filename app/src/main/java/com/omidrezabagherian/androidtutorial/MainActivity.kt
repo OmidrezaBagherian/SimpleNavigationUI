@@ -18,7 +18,18 @@ class MainActivity : AppCompatActivity() {
 
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
 
+        init()
+
         setContentView(mainBinding.root)
+    }
+
+    private fun init(){
+        setupActionBar()
+    }
+
+    private fun setupActionBar(){
+        setSupportActionBar(mainBinding.toolbar)
+        mainBinding.toolbar.inflateMenu(R.menu.main_menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
